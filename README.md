@@ -1,2 +1,2 @@
-# slick
-Java Swing Layout Manager: SlickLayout
+# Slick
+# Java Swing Layout Manager: SlickLayout
