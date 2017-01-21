@@ -24,4 +24,4 @@ frame.setVisible(true);
 ```
 ![example-app-layout-text][example-app-layout]
 
-[example-app-layout]: https://github.com/jpxor/slick/examples/res/example-app-layout.png "example-app-layout"
+[example-app-layout]: https://github.com/jpxor/slick/blob/dev/Examples/res/example-app-layout.png "example-app-layout"
