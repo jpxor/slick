@@ -110,7 +110,11 @@ public class SlickLayout implements LayoutManager2
 				if(constr.hSizing == SlickConstraint.HorizontalFill)
 				{
 					float fraction = constr.getFillWeightHorizontal() / totHorizontalFillWeight;
-					compWidth = (int) (fraction * filledWidth);
+					float trueWidth = fraction * filledWidth;
+					compWidth = (int)trueWidth;
+					
+					//fix: a row was sometimes missing a single pixel because of rounding:
+					if( compWidth < trueWidth ){ compWidth += 1; }
 				}
 				else compWidth = comp.getPreferredSize().width;
 				
@@ -121,7 +125,11 @@ public class SlickLayout implements LayoutManager2
 					if( ! isVerticallyPacked[row] )
 					{
 						float fraction = constr.getFillWeightVertical() / totVerticalFillWeight;
-						compHeight = (int)( fraction * filledHeight );
+						float trueHeight = fraction * filledHeight;
+						compHeight = (int)trueHeight;
+						
+						//fix: the layout was sometimes a single pixel short because of rounding:
+						if( compHeight < trueHeight ){ compHeight += 1; }
 					}
 					else compHeight = rowHeights[row];
 				}
