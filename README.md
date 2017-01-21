@@ -23,9 +23,9 @@ frame.add( contentPanel, new SlickConstraint(1, SlickConstraint.HorizontalFill, 
 frame.pack();
 frame.setVisible(true);
 ```
+![example-app-layout-text][example-app-layout]
 The header is fixed height (64) but grows horizontally to fill the width of the frame.
 The navbar is fixed width (200) but grows vertically to fill the height of the frame. 
 The contentPanel has no fixed dimensions. It will fill the as much space as it can. 
-![example-app-layout-text][example-app-layout]
 
 [example-app-layout]: https://github.com/jpxor/slick/blob/dev/Examples/res/example-app-layout.png "example-app-layout"
