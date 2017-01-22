@@ -27,6 +27,7 @@ package jpx.slick.layout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.LayoutManager2;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -83,13 +84,12 @@ public class SlickLayout implements LayoutManager2
 	@Override
 	public void layoutContainer(Container container) 
 	{
-		int containerWidth = container.getSize().width;
-		int containerHeight = container.getSize().height;
+		Insets insets = container.getInsets();
+		int containerWidth = container.getSize().width - (insets.left + insets.right);
+		int containerHeight = container.getSize().height - (insets.top + insets.bottom);
 		
 		int[] rowHeights = getRowHeights();
 		boolean[] isVerticallyPacked = findVerticallyPackedRows();
-		
-		int cumulativeRowHeights = 0;
 		
 		int packedHeight = 0;
 		int filledHeight = 0;
@@ -111,6 +111,9 @@ public class SlickLayout implements LayoutManager2
 			}
 		}
 		filledHeight = containerHeight - packedHeight;
+		
+		//used for y position of components
+		int cumulativeRowHeights = insets.top;
 		
 		for(int row = 0; row < componentListByRow.size(); ++row )
 		{
@@ -134,14 +137,14 @@ public class SlickLayout implements LayoutManager2
 			}
 			filledWidth = containerWidth - packedWidth;
 			
-			int x = 0;
+			int x = insets.left;
 			for( Component comp : components )
 			{
 				SlickConstraint constr = constraintMap.get(comp);
 				
 				int compWidth = 0;
 				int compHeight = 0;
-				int y = 0;
+				int y;
 				
 				if(constr.hSizing == SlickConstraint.HorizontalFill)
 				{
@@ -275,8 +278,9 @@ public class SlickLayout implements LayoutManager2
 	@Override
 	public Dimension preferredLayoutSize(Container container) 
 	{
-		int longestRow = max( getRowWidths() );
-		int sumRowHeights = sum( getRowHeights()  );
+		Insets insets = container.getInsets();
+		int longestRow = max( getRowWidths() ) + insets.left + insets.right;
+		int sumRowHeights = sum( getRowHeights()  ) + insets.top + insets.bottom;
 		return new Dimension(longestRow, sumRowHeights);
 	}
 
