@@ -1,6 +1,6 @@
 # Slick
 ## SlickLayout: Java Swing Layout Manager
-Get the jar file: [SlickLayout-0.9.jar](https://github.com/jpxor/slick/blob/dev/Dist/SlickLayout-0.9.jar)
+Get the jar file: [SlickLayout-0.91.jar](https://github.com/jpxor/slick/blob/dev/Dist/SlickLayout-0.91.jar)
 
 Mix horizontally and vertically scaled components with fixed size components in a single layout. Add a component by specifying a row and its scaling constraints. In a single row, components are layed out in order of insertion. 
 
@@ -30,8 +30,14 @@ frame.setVisible(true);
 ```
 ![example-app-layout-text][example-app-layout]
 
+#### Layout Test
+* The following JFrame is set up while testing the layout manager:
+
+![example-layout-test-text][example-layout-test]
 
 
 
 
-[example-app-layout]: https://github.com/jpxor/slick/blob/dev/Examples/res/example-app-layout.png "example-app-layout"
+
+[example-app-layout]: https://github.com/jpxor/slick/blob/master/Examples/res/example-app-layout.png "example-app-layout"
+[example-layout-test]: https://github.com/jpxor/slick/blob/master/Examples/res/example-layout-test.png "example-layout-test"
