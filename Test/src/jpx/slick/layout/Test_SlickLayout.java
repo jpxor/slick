@@ -2,9 +2,12 @@ package jpx.slick.layout;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.Random;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -17,16 +20,61 @@ public class Test_SlickLayout {
 
 	public static boolean runTest() 
 	{
-		boolean pass = true;
+		boolean temp = true, pass = true;
 		System.out.println("Test: SlickLayout");
 		//======================================
-		pass &= layoutTest();
+		pass &= (temp = layoutTest());
+		System.out.println("      layoutTest: " + (temp?"PASS":"FAIL"));
+		
+		pass &= (temp = borderTest());
+		System.out.println("      borderTest: " + (temp?"PASS":"FAIL"));
 		//======================================
 		System.out.println("      > " + (pass?"PASS":"FAIL"));
 		System.out.println();
 		return pass;
 	}
 
+	/**
+	 * 
+	 * Tests
+	 * 
+	 */
+	
+	private static boolean borderTest()
+	{	
+		JFrame frame = new JFrame();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+		
+		JPanel contentPanel = new JPanel();
+		contentPanel.setLayout( new SlickLayout() );
+		contentPanel.setBorder( BorderFactory.createEmptyBorder(10, 10, 10, 10) );
+		
+		JPanel comp1 = new RandomColorPanel( new Dimension( 200, 200 ), "1" );
+		contentPanel.add(comp1, new SlickConstraint(0, SlickConstraint.HorizontalPack, SlickConstraint.VerticalPack) );
+		
+		frame.add(contentPanel);
+		frame.pack();
+		//frame.setVisible(true);
+		frame.dispose();
+		
+		boolean pass = true;
+		
+		//java.awt.Rectangle[x=62,y=0,width=236,height=259]
+		Rectangle frameBounds = frame.getBounds();
+		pass &= (frameBounds.width == 236)&(frameBounds.height == 259);
+		
+		//java.awt.Rectangle[x=0,y=0,width=220,height=220]
+		Rectangle contentPanelBounds = contentPanel.getBounds();
+		pass &= (contentPanelBounds.width == 220)&(contentPanelBounds.height == 220);
+		pass &= (contentPanelBounds.x == 0)&(contentPanelBounds.y == 0);
+			
+		//java.awt.Rectangle[x=10,y=10,width=200,height=200]
+		Rectangle comp1Bounds = comp1.getBounds();
+		pass &= (comp1Bounds.width == 200)&(comp1Bounds.height == 200);
+		pass &= (comp1Bounds.x == 10)&(comp1Bounds.y == 10);
+		
+		return pass;
+	}
 	
 	private static boolean layoutTest() 
 	{
@@ -48,28 +96,31 @@ public class Test_SlickLayout {
 		JPanel comp12 = new RandomColorPanel( new Dimension( 100, 100 ), "12" );
 		JPanel comp13 = new RandomColorPanel( new Dimension( 200, 100 ), "13" ); 
 		
-		JFrame frame = new JFrame();
+		JFrame frame = new JFrame("Layout Test");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
 		
-		frame.setLayout( new SlickLayout() ); 
+		JPanel contentPanel = new JPanel();
+		contentPanel.setLayout( new SlickLayout() );
 		
-		frame.add(comp1, new SlickConstraint(0, SlickConstraint.HorizontalFill, SlickConstraint.VerticalPack) ); 
-		frame.add(comp2, new SlickConstraint(5, SlickConstraint.HorizontalFill, SlickConstraint.VerticalPack) ); 
-		frame.add(comp3, new SlickConstraint(5, SlickConstraint.HorizontalFill, SlickConstraint.VerticalPack) ); 
+		frame.add(contentPanel);
 		
-		frame.add(comp4, new SlickConstraint(1, SlickConstraint.HorizontalFill, SlickConstraint.VerticalFill) ); 
-		frame.add(comp5, new SlickConstraint(1, SlickConstraint.HorizontalPack, SlickConstraint.VerticalFill) );
-		frame.add(comp6, new SlickConstraint(1, SlickConstraint.HorizontalFill, SlickConstraint.VerticalPack) ); 
+		contentPanel.add(comp1, new SlickConstraint(0, SlickConstraint.HorizontalFill, SlickConstraint.VerticalPack) ); 
+		contentPanel.add(comp2, new SlickConstraint(5, SlickConstraint.HorizontalFill, SlickConstraint.VerticalPack) ); 
+		contentPanel.add(comp3, new SlickConstraint(5, SlickConstraint.HorizontalFill, SlickConstraint.VerticalPack) ); 
 		
-		frame.add(comp7, new SlickConstraint(2, SlickConstraint.HorizontalPack, SlickConstraint.VerticalPack) ); 
-		frame.add(comp8, new SlickConstraint(2, SlickConstraint.HorizontalFill, SlickConstraint.VerticalPack).setAlignmentY(0.5f) );
-		frame.add(comp9, new SlickConstraint(2, SlickConstraint.HorizontalPack, SlickConstraint.VerticalPack).setAlignmentY(1.0f) ); 
+		contentPanel.add(comp4, new SlickConstraint(1, SlickConstraint.HorizontalFill, SlickConstraint.VerticalFill) ); 
+		contentPanel.add(comp5, new SlickConstraint(1, SlickConstraint.HorizontalPack, SlickConstraint.VerticalFill) );
+		contentPanel.add(comp6, new SlickConstraint(1, SlickConstraint.HorizontalFill, SlickConstraint.VerticalPack) ); 
 		
-		frame.add(comp10, new SlickConstraint(4,SlickConstraint.HorizontalPack, SlickConstraint.VerticalFill ));
-		frame.add(comp11, new SlickConstraint(4,SlickConstraint.HorizontalFill, SlickConstraint.VerticalFill )); 
+		contentPanel.add(comp7, new SlickConstraint(2, SlickConstraint.HorizontalPack, SlickConstraint.VerticalPack) ); 
+		contentPanel.add(comp8, new SlickConstraint(2, SlickConstraint.HorizontalFill, SlickConstraint.VerticalPack).setAlignmentY(0.5f) );
+		contentPanel.add(comp9, new SlickConstraint(2, SlickConstraint.HorizontalPack, SlickConstraint.VerticalPack).setAlignmentY(1.0f) ); 
 		
-		frame.add(comp12, new SlickConstraint(3,SlickConstraint.HorizontalFill, SlickConstraint.VerticalFill ));
-		frame.add(comp13, new SlickConstraint(3,SlickConstraint.HorizontalPack, SlickConstraint.VerticalFill ));
+		contentPanel.add(comp10, new SlickConstraint(4,SlickConstraint.HorizontalPack, SlickConstraint.VerticalFill ));
+		contentPanel.add(comp11, new SlickConstraint(4,SlickConstraint.HorizontalFill, SlickConstraint.VerticalFill )); 
+		
+		contentPanel.add(comp12, new SlickConstraint(3,SlickConstraint.HorizontalFill, SlickConstraint.VerticalFill ));
+		contentPanel.add(comp13, new SlickConstraint(3,SlickConstraint.HorizontalPack, SlickConstraint.VerticalFill ));
 		
 		frame.pack(); 
 		
@@ -105,9 +156,15 @@ public class Test_SlickLayout {
 		
 		//frame.setVisible(true);
 		frame.dispose();
-		
 		return pass;
 	}
+	
+	
+	/**
+	 * 
+	 * Helpers
+	 *
+	 */
 	
 	@SuppressWarnings("serial")
 	static class RandomColorPanel extends JPanel
@@ -133,7 +190,18 @@ public class Test_SlickLayout {
 			Rectangle bounds = this.getBounds();
 			return name + "[x=" + bounds.x +",y="+bounds.y+",width="+bounds.width+",height="+bounds.height+"]";
 		}
+		
+		public void paintComponent(Graphics g)
+		{
+			super.paintComponent(g);
+			
+			FontMetrics fm = g.getFontMetrics();
+			int strw = fm.stringWidth(name);
+			int strh = fm.getHeight();
+			g.drawString(name, (getSize().width-strw)/2, (getSize().height+strh)/2);
+		}
 	}
+
 
 
 }
